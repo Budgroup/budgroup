@@ -12,10 +12,20 @@ if ( process.env.NODE_ENV === 'production' ) {
 else 
     bot = new Bot(token, { polling: true });
 
-bot.on('message', (msg) => {
+// Обработка начала общений
+bot.onText(/\/start/, (msg, match) => {
     const name = msg.from.first_name;
 
-    bot.sendMessage(msg.chat.id, 'Привет')
+    bot.sendMessage(msg.chat.id, "Привет, " + name + "! **Тут должна быть хелпа**");
+    return 
+})
+
+bot.on('message', (msg) => {
+    bot.sendMessage(msg.chat.id, 'Привет, дорогой')
+
+    return 
 });
 
+
+// Отправляем экспресу бота для работы
 require('./web')(bot);
