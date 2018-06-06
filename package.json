@@ -1,0 +1,23 @@
+{
+  "name": "telegram-bot",
+  "version": "1.0.0",
+  "description": "bot.Budget (Golang) [Open Source + платный(100 RUB) tutorial]",
+  "main": "app.js",
+  "dependencies": {
+    "node-telegram-bot-api": "^0.30.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Budgroup/telegram-bot.git"
+  },
+  "author": "budgroup",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Budgroup/telegram-bot/issues"
+  },
+  "homepage": "https://github.com/Budgroup/telegram-bot#readme"
+}
