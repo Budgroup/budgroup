@@ -7,14 +7,15 @@
     "body-parser": "^1.18.3",
     "config": "^1.30.0",
     "express": "^4.16.3",
+    "jsonfile": "^4.0.0",
+    "mongoose": "^5.1.4",
     "node-telegram-bot-api": "^0.30.0"
   },
   "devDependencies": {
     "dotenv": "^6.0.0"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "babel-node app --presets=env"
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
