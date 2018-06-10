@@ -1,7 +1,12 @@
 const bot = require('./src/bot/bot');
 
-// const mongoose = require('mongoose');
-// mongoose.connect("mongodb://<dbuser>:<dbpassword>@ds147440.mlab.com:47440/budgroup", { useMongoClient: true });
+const mongoose = require('mongoose');
+mongoose.connect(process.env.URI, { useMongoClient: true }, () => {
+    console.log('База запахала');
+},
+(err) => {
+    console.log('Туши огонь, база сдохла ', err);
+});
 
 // Отправляем экспресу бота для работы
 require('./src/web')(bot);
