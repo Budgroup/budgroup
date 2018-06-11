@@ -18,7 +18,13 @@ var Comands = {
     startCommand : (bot, msg) => {
         bot.sendMessage(msg.chat.id, convertArrayToString(config.start));
 
-        console.log('Вот что находится в "чате": ', Chat);
+        let newChat = new Chat({id : msg.chat.id.toString(), balance : 0});
+
+        // Если не было ошибок и не было подобных юзеров, тогда сохраняем их в базу
+        Chat.findOne({id : msg.chat.id.toString()}, (err, res) => {
+            if (!err && !res)
+                newChat.save();
+        });
     },
     helpCommand :  (bot, msg) => {
         bot.sendMessage(msg.chat.id, convertArrayToString(config.help));
