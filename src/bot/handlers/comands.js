@@ -1,5 +1,9 @@
 const config = require('jsonfile').readFileSync('src/bot/config.json');
 
+const {
+    Chat,
+} = require('../../../models');
+
 function convertArrayToString(arr) {
     var text = "";
     
@@ -13,6 +17,8 @@ function convertArrayToString(arr) {
 var Comands = {
     startCommand : (bot, msg) => {
         bot.sendMessage(msg.chat.id, convertArrayToString(config.start));
+
+        console.log('Вот что находится в "чате": ', Chat);
     },
     helpCommand :  (bot, msg) => {
         bot.sendMessage(msg.chat.id, convertArrayToString(config.help));

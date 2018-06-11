@@ -1,12 +1,25 @@
-const bot = require('./src/bot/bot');
-
+// Подключение база
 const mongoose = require('mongoose');
-mongoose.connect(process.env.URI, { useMongoClient: true }, () => {
-    console.log('База запахала');
+mongoose.Promise = global.Promise;
+
+mongoose.connect(process.env.URI, 
+{
+    server: {
+        socketOptions: {
+        socketTimeoutMS: 10000,
+        connectTimeoutMS: 50000,
+      },
+    },
+}, 
+() => {
+    console.log('База работает');
 },
 (err) => {
-    console.log('Туши огонь, база сдохла ', err);
+    console.log('База не работает: ', err);
 });
+
+// Инициализируем бота
+const bot = require('./src/bot/bot');
 
 // Отправляем экспресу бота для работы
 require('./src/web')(bot);
