@@ -36,7 +36,14 @@ var Comands = {
         bot.sendMessage(msg.chat.id, convertArrayToString(config.list));
     },
     balanceCommand :  (bot, msg) => {
-        bot.sendMessage(msg.chat.id, convertArrayToString(config.balance));
+        // В сумме на счету ((имя баланса)) n денег
+        Chat.findOne({id : msg.chat.id.toString()}, (err, res) => {
+            if (!err && res){
+                bot.sendMessage(msg.chat.id, "В сумме на счету " + res.balance + " рублей.");
+            }else {
+                bot.sendMessage(msg.chat.id, "Произошла ошибка...\nПопробуйте позже!");
+            }
+        });
     },
     categoryCommand :  (bot, msg) => {
         bot.sendMessage(msg.chat.id, convertArrayToString(config.category));
