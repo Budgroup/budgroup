@@ -77,6 +77,7 @@ const checkText = (bot, msg, chat) => {
         let operationText = text.substring(spacePos, text.length);
 
         // Добавляем новую операцию на сегодняшний день
+        // TODO: сделать нормальный перерасчет транзакций
         let newOperationBody = new OperationBody({value : operationPay, description: operationText});
         newOperationBody.save();
 
@@ -90,11 +91,15 @@ const checkText = (bot, msg, chat) => {
         newOperation.save();
 
         chat.operations.push(newOperation);
-
+        chat.balance += Number(operationPay);
+    
         chat.save();
 
+        
         // TODO: переписать текст
-        bot.sendMessage(msg.chat.id, "Отлично! Что-то еще?");        
+        
+        bot.sendMessage( msg.chat.id, "Текущий баланс : " + chat.balance + "\nСколько придется тратить каждый день : " + Math.floor(chat.balance / lib.dayLeft()) );
+        bot.sendMessage(msg.chat.id, "Что-то еще?");        
     }else {
         // Отправляет это, если что-то пошло не так в случае добавления новой транзакции
         // TODO: переделать текст
