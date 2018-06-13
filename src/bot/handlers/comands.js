@@ -4,15 +4,7 @@ const {
     Chat,
 } = require('../../../models');
 
-function convertArrayToString(arr) {
-    var text = "";
-    
-    arr.forEach(element => {
-        text += element + "\n";
-    });
-
-    return text;
-}
+const lib = require('../lib');
 
 var Comands = {
     startCommand : (bot, msg) => {
@@ -22,23 +14,23 @@ var Comands = {
         Chat.findOne({id : msg.chat.id.toString()}, (err, res) => {
             if (!err && !res){
                 newChat.save();
-                bot.sendMessage(msg.chat.id, convertArrayToString(config.start));
+                bot.sendMessage(msg.chat.id, lib.convertArrayToString(config.start));
                 
-                bot.sendMessage(msg.chat.id, "Каков ваш текущий бюджет?");
+                bot.sendMessage(msg.chat.id, "Каков ваш текущий бюджет в рублях?");
             } else {
                 // Если человек зарегистрирован, то отправляем ему хелп
-                this.helpCommand(bot, msg);
+                Comands.helpCommand(bot, msg);
             }
         });
     },
     helpCommand :  (bot, msg) => {
-        bot.sendMessage(msg.chat.id, convertArrayToString(config.help));
+        bot.sendMessage(msg.chat.id, lib.convertArrayToString(config.help));
     },
     addCommand :  (bot, msg) => {
-        bot.sendMessage(msg.chat.id, convertArrayToString(config.add));
+        bot.sendMessage(msg.chat.id, lib.convertArrayToString(config.add));
     },
     listCommand :  (bot, msg) => {
-        bot.sendMessage(msg.chat.id, convertArrayToString(config.list));
+        bot.sendMessage(msg.chat.id, lib.convertArrayToString(config.list));
     },
     balanceCommand :  (bot, msg) => {
         // В сумме на счету ((имя баланса)) n денег
@@ -51,7 +43,7 @@ var Comands = {
         });
     },
     categoryCommand :  (bot, msg) => {
-        bot.sendMessage(msg.chat.id, convertArrayToString(config.category));
+        bot.sendMessage(msg.chat.id, lib.convertArrayToString(config.category));
     },
 };
 
