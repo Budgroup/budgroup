@@ -24,5 +24,6 @@
     "add" : ["Text add"],
     "list" : ["Text list"], 
     "balance" : ["Text balance"],
-    "category" : ["Text category"]
+    "category" : ["Text category"],
+    "error" : ["Произошла ошибка! Попробуйте повторить действие позже..."]
 }

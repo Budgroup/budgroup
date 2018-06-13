@@ -24,10 +24,10 @@ var Comands = {
                 newChat.save();
                 bot.sendMessage(msg.chat.id, convertArrayToString(config.start));
                 
-                bot.sendMessage(msg.chat.id, "Каков ваш текущий бюджет?");
+                bot.sendMessage(msg.chat.id, "Каков ваш текущий бюджет в рублях?");
             } else {
                 // Если человек зарегистрирован, то отправляем ему хелп
-                this.helpCommand(bot, msg);
+                Comands.helpCommand(bot, msg);
             }
         });
     },

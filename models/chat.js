@@ -15,7 +15,7 @@ const chatSchema = new Schema({
         required : true,
     },
     /*
-        0 - 2 -- аккаунт не активирован 
+        0 - 1 -- аккаунт не активирован 
         0 - только что зарегистрирован
         1 - ответил на вопрос о текущем балансе
         2 - ответил на вопрос о сумме ежемесячного пополнения
@@ -25,5 +25,11 @@ const chatSchema = new Schema({
         required : true,
     }
 }, { timestamps: true });
+
+chatSchema.methods = {
+    getStatus(){
+        return this.status;
+    },
+};
 
 module.exports = mongoose.model('chat', chatSchema);

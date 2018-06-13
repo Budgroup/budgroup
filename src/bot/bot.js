@@ -4,6 +4,7 @@ const TelegramBot = require('node-telegram-bot-api');
 const token = process.env.TOKEN;
 
 const commands = require('./handlers/comands');
+const text = require('./handlers/text');
 
 let bot = new TelegramBot(token);
 bot.setWebHook(process.env.HEROKU_URL + token);
@@ -47,8 +48,10 @@ bot.on('message', (msg) => {
             return;
         }
 
-                
-
+        // Обработка текста
+        if (msg.text) { 
+            text(bot, msg)
+        }
     } 
     else {
         // Обработка сообщений группы
