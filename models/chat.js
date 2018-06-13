@@ -23,7 +23,13 @@ const chatSchema = new Schema({
     status : {
         type : Number,
         required : true,
-    }
+    },
+    operations : [{
+        type : Schema.ObjectId,
+        required : true,
+        default : [],
+        ref : 'operation',
+    }],
 }, { timestamps: true });
 
 chatSchema.methods = {
