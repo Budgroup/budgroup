@@ -42,9 +42,13 @@ bot.on('message', (msg) => {
                         commands.categoryCommand(bot, msg);
                     break;
             }
+
             
             return;
         }
+
+                
+
     } 
     else {
         // Обработка сообщений группы

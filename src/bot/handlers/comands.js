@@ -16,14 +16,18 @@ function convertArrayToString(arr) {
 
 var Comands = {
     startCommand : (bot, msg) => {
-        bot.sendMessage(msg.chat.id, convertArrayToString(config.start));
-
         let newChat = new Chat({id : msg.chat.id.toString(), balance : 0});
 
         // Если не было ошибок и не было подобных юзеров, тогда сохраняем их в базу
         Chat.findOne({id : msg.chat.id.toString()}, (err, res) => {
-            if (!err && !res)
+            if (!err && !res){
                 newChat.save();
+                bot.sendMessage(msg.chat.id, convertArrayToString(config.start));
+                
+            } else {
+                // Если человек зарегистрирован, то отправляем ему хелп
+                bot.sendMessage(msg.chat.id, convertArrayToString(config.help));
+            }
         });
     },
     helpCommand :  (bot, msg) => {

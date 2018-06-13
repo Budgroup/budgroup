@@ -1,4 +1,4 @@
-// Подключение база
+// Подключение базы
 const mongoose = require('mongoose');
 mongoose.Promise = global.Promise;
 
