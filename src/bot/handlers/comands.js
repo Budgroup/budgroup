@@ -2,7 +2,10 @@ const config = require('jsonfile').readFileSync('src/bot/config.json');
 
 const {
     Chat,
+    Operation,
+    OperationBody
 } = require('../../../models');
+
 
 const lib = require('../lib');
 
