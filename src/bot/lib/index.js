@@ -17,7 +17,7 @@ module.exports = {
     },
     getToday : () => {
         let today = new Date();   
-        todat = new Date(today.getUTCFullYear(), today.getUTCMonth(), today.getUTCDate() + 1, 0, 0);
+        today = new Date(today.getUTCFullYear(), today.getUTCMonth(), today.getUTCDate() + 1, 0, 0);
         
         return today;
     },

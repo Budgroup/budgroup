@@ -112,8 +112,7 @@ const analyzeMinus = (bot, msg, chat, pay) => {
     // TODO: Добавить проверку долгов
     // Проверяем дату
     let today = lib.getToday();
-    console.log(today);
-    if ( chat.today != today ){
+    if ( chat.today.getDate() != today.getDate() ){
         // Если последня трата совершенна не сегодня
         chat.today = today;
         chat.todayIsSpent = 0;
@@ -121,7 +120,8 @@ const analyzeMinus = (bot, msg, chat, pay) => {
         chat.save();
     }
 
-    let dailyRate = Math.floor(chat.balance / lib.dayLeft());
+    let dailyRate = Math.floor( (chat.balance + chat.todayIsSpent) / lib.dayLeft());
+    console.log("Daily rate:" + dailyRate);
     
     if ((-1) * pay < (dailyRate - chat.todayIsSpent) ) {
         // Если сумма вычета меньше дневной нормы
@@ -131,12 +131,12 @@ const analyzeMinus = (bot, msg, chat, pay) => {
 
         chat.save();
 
-        bot.sendMessage( msg.chat.id, "Текущий баланс : " + chat.balance + "\nУ вас на сегодня осталось " + (dailyRate - pay) );
+        bot.sendMessage( msg.chat.id, "Текущий баланс : " + chat.balance + "\nУ вас на сегодня осталось " + (dailyRate - chat.todayIsSpent + pay) );
     }else if ( (-1) * pay == (dailyRate - chat.todayIsSpent) ) {
         // Если сумма выплат равна дневной норме
 
         chat.balance += Number(pay);
-        chat.todayIsSpent += (-1) * pay;
+        chat.todayIsSpent += pay;
         chat.save();
         
         bot.sendMessage( msg.chat.id, "Текущий баланс : " + chat.balance + "\nУ вас на сегодня не осталось средств:(" );
@@ -149,14 +149,14 @@ const analyzeMinus = (bot, msg, chat, pay) => {
 
             chat.credit += (-1) * pay;
             chat.balance += pay;
-            chat.todayIsSpent += (-1) * pay;
+            chat.todayIsSpent -= pay;
         } else {
             // Если мы не брали сегодня кредит, то ... 
 
             chat.credit = (-1) * pay;
             chat.dateCredit = today;
             chat.balance += pay;
-            chat.todayIsSpent += (-1) * pay;
+            chat.todayIsSpent -= pay;
         }
         // Сохраняем изменения
         chat.save();
