@@ -112,6 +112,7 @@ const analyzeMinus = (bot, msg, chat, pay) => {
     // TODO: Добавить проверку долгов
     // Проверяем дату
     let today = lib.getToday();
+    console.log(today);
     if ( chat.today != today ){
         // Если последня трата совершенна не сегодня
         chat.today = today;
@@ -130,7 +131,7 @@ const analyzeMinus = (bot, msg, chat, pay) => {
 
         chat.save();
 
-        bot.sendMessage( msg.chat.id, "Текущий баланс : " + chat.balance + "\nУ вас на сегодня осталось " + dailyRate - pay );
+        bot.sendMessage( msg.chat.id, "Текущий баланс : " + chat.balance + "\nУ вас на сегодня осталось " + (dailyRate - pay) );
     }else if ( (-1) * pay == (dailyRate - chat.todayIsSpent) ) {
         // Если сумма выплат равна дневной норме
 
