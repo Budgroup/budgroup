@@ -77,7 +77,6 @@ const checkText = (bot, msg, chat) => {
         let operationText = text.substring(spacePos, text.length);
 
         // Добавляем новую операцию на сегодняшний день
-        // TODO: сделать нормальный перерасчет транзакций
         let newOperationBody = new OperationBody({value : operationPay, description: operationText});
         newOperationBody.save();
 
@@ -91,20 +90,95 @@ const checkText = (bot, msg, chat) => {
         newOperation.save();
 
         chat.operations.push(newOperation);
-        chat.balance += Number(operationPay);
+        // chat.balance += Number(operationPay);
     
         chat.save();
 
         
-        // TODO: переписать текст
-        
-        bot.sendMessage( msg.chat.id, "Текущий баланс : " + chat.balance + "\nСколько придется тратить каждый день : " + Math.floor(chat.balance / lib.dayLeft()) );
-        bot.sendMessage(msg.chat.id, "Что-то еще?");        
+        if (operationPay < 0)
+            analyzeMinus(bot, msg, chat, newOperationBody.value);
+        else 
+            analyzePluse(bot, msg, chat, newOperationBody.value);
+
     }else {
         // Отправляет это, если что-то пошло не так в случае добавления новой транзакции
         // TODO: переделать текст
         bot.sendMessage(msg.chat.id, "Уфф... Деньги... Попробуйте еще раз!");
     }
+};
+
+// Анализирует, если пришла отрицательная транзакция 
+const analyzeMinus = (bot, msg, chat, pay) => {
+    // TODO: Добавить проверку долгов
+    // Проверяем дату
+    let today = lib.getToday();
+    if ( chat.today != today ){
+        // Если последня трата совершенна не сегодня
+        chat.today = today;
+        chat.todayIsSpent = 0;
+
+        chat.save();
+    }
+
+    let dailyRate = Math.floor(chat.balance / lib.dayLeft());
+    
+    if ((-1) * pay < (dailyRate - chat.todayIsSpent) ) {
+        // Если сумма вычета меньше дневной нормы
+
+        chat.balance += Number(pay);
+        chat.todayIsSpent -= pay;
+
+        chat.save();
+
+        bot.sendMessage( msg.chat.id, "Текущий баланс : " + chat.balance + "\nУ вас на сегодня осталось " + dailyRate - pay );
+    }else if ( (-1) * pay == (dailyRate - chat.todayIsSpent) ) {
+        // Если сумма выплат равна дневной норме
+
+        chat.balance += Number(pay);
+        chat.todayIsSpent += (-1) * pay;
+        chat.save();
+        
+        bot.sendMessage( msg.chat.id, "Текущий баланс : " + chat.balance + "\nУ вас на сегодня не осталось средств:(" );
+    }else if ( (-1) * pay < 2 * (dailyRate - chat.todayIsSpent) ) {
+        // Если сумма меньше двойной выплаты
+
+        if ( chat.dateCredit == today){
+            // TODO : переделать этот способ анализа на тот, чтобы кредит перерасчитывался на остальны дни, либо вообще менялось dailyRate
+            // Если мы сегодня уже брали кредит, то накидываем к нему еще
+
+            chat.credit += (-1) * pay;
+            chat.balance += pay;
+            chat.todayIsSpent += (-1) * pay;
+        } else {
+            // Если мы не брали сегодня кредит, то ... 
+
+            chat.credit = (-1) * pay;
+            chat.dateCredit = today;
+            chat.balance += pay;
+            chat.todayIsSpent += (-1) * pay;
+        }
+        // Сохраняем изменения
+        chat.save();
+
+        bot.sendMessage( msg.chat.id, "На сегодня у вас не осталось средств:(\nВам придется завтра потратить " + (dailyRate - chat.credit) + ", а не " + dailyRate);
+    } else {
+        // Очевидно, что покупка была совершена не на расходники, а на что-то +-дорогое для данного человека
+        chat.balance += pay;
+
+        chat.save();
+        bot.sendMessage( msg.chat.id, "Приятного Вам удовольствия от покупки;)\nТеперь каждый день вам придется тратить по " + (Math.floor(chat.balance / lib.dayLeft())) + " рублей");
+    }
+};
+
+// Анализирует, если пришла положительная транзакция
+const analyzePluse = (bot, msg, chat, pay) => {
+    // TODO: сделать проверку долга на следующий день и добавить в бюджет    
+    chat.balance += pay;
+    chat.save();
+
+    let dailyRate = Math.floor(chat.balance  / lib.dayLeft());
+
+    bot.sendMessage( msg.chat.id, "Круто! Теперь можно каждый день тратить по " + dailyRate + " рублей");
 };
 
 module.exports = handleText;

@@ -24,6 +24,25 @@ const chatSchema = new Schema({
         type : Number,
         required : true,
     },
+    credit : {
+        type : Number,
+        default : 0,
+        required : true,
+    },
+    dateCredit: {
+        type : Date,
+        required : true,
+        // Дата никогда не будет подходить под наше описание при дефолтных настройках
+        default : Date.now
+    },
+    todayIsSpent : {
+        type : Number,
+        default : 0,
+    },
+    today : {
+        type : Date,
+        default: Date.now,
+    },
     operations : [{
         type : Schema.ObjectId,
         required : true,

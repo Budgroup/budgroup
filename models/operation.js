@@ -13,7 +13,4 @@ const operationSchema = new Schema({
     }]
 }, { timestamps: true });
 
-
-
-
 module.exports = mongoose.model('operation', operationSchema);
