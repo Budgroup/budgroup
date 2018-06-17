@@ -37,6 +37,7 @@ const handleText = (bot, msg) => {
 
 // Обработка установка баланса
 const checkBalance = (bot, msg, chat) => {
+    console.log("index E", msg.text.indexOf('e'))
     if (Number(msg.text) && Number(msg.text) > 0 && msg.text.indexOf('e') == -1){
         chat.balance = Number(msg.text);
         chat.status += 1;
@@ -123,7 +124,17 @@ const analyzeMinus = (bot, msg, chat, pay) => {
     let dailyRate = Math.floor( (chat.balance + chat.todayIsSpent) / lib.dayLeft());
     console.log("Daily rate:" + dailyRate);
     
-    if ((-1) * pay < (dailyRate - chat.todayIsSpent) ) {
+    if ( chat.balance + pay < 0 ) {
+        // Если при совершении транзакции бюджет выйдет в отрицательное число
+
+        chat.balance += Number(pay);
+        chat.todayIsSpent -= pay;
+
+        chat.save();
+
+        bot.sendMessage( msg.chat.id, "Упс!\nКажется, что кто-то ушел в минус...\nВам стоило бы дождаться конца месяца или у кого-нибудь занять денег");
+        bot.sendMessage( msg.chat.id, "Ваш текущий баланс : " + chat.balance + "\nДо конца месяца осталось дней : " + lib.dayLeft());
+    } else if ((-1) * pay < (dailyRate - chat.todayIsSpent) ) {
         // Если сумма вычета меньше дневной нормы
 
         chat.balance += Number(pay);
