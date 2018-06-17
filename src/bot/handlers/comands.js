@@ -33,6 +33,7 @@ var Comands = {
         bot.sendMessage(msg.chat.id, lib.convertArrayToString(config.add));
     },
     listCommand :  (bot, msg) => {
+        console.log('/list');
         // TODO: сделать вывод с переключателем всех транзакций пользователя
         // Выдается список последних 10 транзакций
         Chat.findOne({id : msg.chat.id.toString()}, (err, res) => {
