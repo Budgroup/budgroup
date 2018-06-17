@@ -13,6 +13,16 @@ const handleText = (bot, msg) => {
         if (!err && res){
             let chat = res;
 
+            // Проверка на добавление чисел в экспоненциальной форме
+            msg.text += " ";
+            let spacePos = msg.text.indexOf(" ");
+            let operationPay = msg.text.substring(0, spacePos);
+
+            if (operationPay.indexOf('e') != -1){
+                bot.sendMessage(msg.chat.id, "Реально? Рокфеллер вам позавидовал.")
+                return;
+            }
+
             // Обрабатываем статус чата
             switch(chat.getStatus()){
                 case 0:
@@ -37,8 +47,7 @@ const handleText = (bot, msg) => {
 
 // Обработка установка баланса
 const checkBalance = (bot, msg, chat) => {
-    console.log("index E", msg.text.indexOf('e'))
-    if (Number(msg.text) && Number(msg.text) > 0 && msg.text.indexOf('e') == -1){
+    if (Number(msg.text) && Number(msg.text) > 0){
         chat.balance = Number(msg.text);
         chat.status += 1;
 
