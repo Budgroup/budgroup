@@ -33,12 +33,11 @@ var Comands = {
         bot.sendMessage(msg.chat.id, lib.convertArrayToString(config.add));
     },
     listCommand :  (bot, msg) => {
-        console.log('/list');
         // TODO: сделать вывод с переключателем всех транзакций пользователя
         // Выдается список последних 10 транзакций
-        Chat.findOne({id : msg.chat.id.toString()}, (err, res) => {
+        Chat.findOne({id : msg.chat.id.toString()}, async (err, res) => {
             if (!err && res){
-                bot.sendMessage(msg.chat.id, "Последние транзакции: ")
+                bot.sendMessage(msg.chat.id, "Последние транзакции: ", await lib.getSerializeOperations(res));
             }else {
                 bot.sendMessage(msg.chat.id, "Произошла ошибка...\nПопробуйте позже!");
             }
