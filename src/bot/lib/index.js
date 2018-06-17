@@ -31,7 +31,8 @@ module.exports = {
         let array = [];
 
         try{
-            for(let i = 0; i < bot.operations.length; i++){
+            // TODO : добавить переключатель для того, чтобы отображать больше транзакций
+            for(let i = 0; i < Math.min(10, bot.operations.length); i++){
                 let operationsData = await Operation.find( {"_id" : bot.operations[i]}).exec();
                 let operBodyData = await OperationBody.find({"_id" : operationsData[0].operationBody[0]}).exec();
                 operBodyData = operBodyData[0];
@@ -45,7 +46,7 @@ module.exports = {
 
                 array.push({
                     text : text,
-                    cback : operBodyData._id,
+                    cback : bot._id + ":" + operBodyData._id,
                 });
             }
         }

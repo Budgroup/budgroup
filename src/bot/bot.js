@@ -5,9 +5,15 @@ const token = process.env.TOKEN;
 
 const commands = require('./handlers/comands');
 const text = require('./handlers/text');
+const callback = require('./handlers/callback');
 
 let bot = new TelegramBot(token);
 bot.setWebHook(process.env.HEROKU_URL + token);
+
+
+bot.on('callback_query', (msg) => {
+    callback.analyzeCallback(msg, bot);
+});
 
 bot.on('message', (msg) => {
     if (!msg)  return;
