@@ -35,7 +35,18 @@ module.exports = {
                 let operationsData = await Operation.find( {"_id" : bot.operations[i]}).exec();
                 let operBodyData = await OperationBody.find({"_id" : operationsData[0].operationBody[0]}).exec();
                 operBodyData = operBodyData[0];
-                array.push(operBodyData.value + " руб. - " + operBodyData.description);
+
+                let text = "";
+                // Если описание не пустое
+                if (operBodyData.description != "  ")
+                    text = operBodyData.value + " руб. - " + operBodyData.description;
+                else 
+                    text = operBodyData.value + " руб.";
+
+                array.push({
+                    text : text,
+                    cback : operBodyData._id,
+                });
             }
         }
         catch (err) {console.log("getOperation Error " + err)};
@@ -49,7 +60,7 @@ module.exports = {
 
         for(let i = 0; i < operations.length; i++){
             // TODO: сделать нормальную кол бек дату
-            outputData.inline_keyboard.push([{text : operations[i], callback_data : i}])
+            outputData.inline_keyboard.push([{text : operations[i].text, callback_data : operations[i].cback}])
         }
 
         return {reply_markup : JSON.stringify(outputData) };
