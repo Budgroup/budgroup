@@ -131,7 +131,7 @@ const analyzeMinus = (bot, msg, chat, pay) => {
 
         chat.save();
 
-        bot.sendMessage( msg.chat.id, "Текущий баланс : " + chat.balance + "\nУ вас на сегодня осталось " + (dailyRate - chat.todayIsSpent + pay) );
+        bot.sendMessage( msg.chat.id, "Текущий баланс : " + chat.balance + "\nУ вас на сегодня осталось " + (dailyRate - chat.todayIsSpent) );
     }else if ( (-1) * pay == (dailyRate - chat.todayIsSpent) ) {
         // Если сумма выплат равна дневной норме
 
@@ -140,7 +140,7 @@ const analyzeMinus = (bot, msg, chat, pay) => {
         chat.save();
         
         bot.sendMessage( msg.chat.id, "Текущий баланс : " + chat.balance + "\nУ вас на сегодня не осталось средств:(" );
-    }else if ( (-1) * pay < 2 * (dailyRate - chat.todayIsSpent) ) {
+    }else if ( (-1) * pay + chat.todayIsSpent < 2 * (dailyRate ) ) {
         // Если сумма меньше двойной выплаты
 
         if ( chat.dateCredit == today){
