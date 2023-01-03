@@ -5,7 +5,7 @@
   "main": "app.js",
   "dependencies": {
     "body-parser": "^1.18.3",
-    "config": "^1.30.0",
+    "config": "^1.31.0",
     "express": "^4.16.3",
     "jsonfile": "^4.0.0",
     "mongoose": "^5.1.4",
